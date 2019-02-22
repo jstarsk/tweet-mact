@@ -20,42 +20,51 @@ map_zoom = 11
 
 
 def add_fetched_tweets_loc():
-    db_folder = "%s/db/" % (os.getcwd())
+    db_folder = "%s\\db\\" % (os.getcwd())
     db_csv = glob.glob("%s*.csv" % db_folder)
     print(db_csv)
     _tweets_locations = []
 
     for db in  db_csv:
-        df = pd.read_csv(db)
+        try:
+            df = pd.read_csv(db)
 
-        for index, row in df.iterrows():
-            try:
+            for index, row in df.iterrows():
                 try:
-                    coordinates_lon = float(row['coordinates_lon'])
-                    coordinates_lat = float(row['coordinates_lat'])
-                    loc_range = float(row['_search_loc_range'])
+                    try:
+                        coordinates_lon = float(row['coordinates_lon'])
+                        coordinates_lat = float(row['coordinates_lat'])
+                        loc_range = 0.05
+                        opacity = 1.0
 
+                    except Exception as e:
+                        coordinates_lon = float(row['_search_loc_lon'])
+                        coordinates_lat = float(row['_search_loc_lat'])
+                        loc_range = float(row['_search_loc_range'])
+                        opacity = 0.03
+
+                        print(e)
+                        pass
+
+                    point = Point((coordinates_lon, coordinates_lat))
+                    properties_point = {
+                        'title': row['place_name'],
+                        'diameter': loc_range,
+                        'opacity': opacity
+                    }
+
+                    feature_point = Feature(geometry=point, properties=properties_point)
+
+                    _tweets_locations.append(feature_point)
                 except Exception as e:
-                    coordinates_lon = float(row['_search_loc_lon'])
-                    coordinates_lat = float(row['_search_loc_lat'])
-                    loc_range = float(row['_search_loc_range'])
                     print(e)
-                    pass
+                    print("Sorry there was an error adding a marker!")
 
-                point = Point((coordinates_lon, coordinates_lat))
-                properties_point = {
-                    'title': row['place_name'],
-                    'diameter': loc_range
-                }
+        except Exception as e:
+            print(e)
 
-
-                feature_point = Feature(geometry=point, properties=properties_point)
-
-                _tweets_locations.append(feature_point)
-            except Exception as e:
-                print(e)
-                print("Sorry there was an error adding a marker!")
     return _tweets_locations
+
 
 
 @app.route('/twitter_map')
