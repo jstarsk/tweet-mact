@@ -2,7 +2,6 @@ import os
 import pandas as pd
 import glob
 from geojson import Point, Feature, LineString, Polygon
-from geojson_utils import draw_circle
 from flask import Flask, request, session, g, redirect, url_for, abort, render_template, flash
 
 app = Flask(__name__)
@@ -53,7 +52,15 @@ def add_fetched_tweets_loc():
                     properties_point = {
                         'title': row['place_name'],
                         'diameter': loc_range,
-                        'opacity': opacity
+                        'opacity': opacity,
+                        'sentiment_classifier_score': row['sentiment_classifier_score'],
+                        'label': row['label'],
+                        'created_at': row['created_at'],
+                        'coordinates_type': row['coordinates_type'],
+                        'place_name': row['place_name'],
+                        'retweet_count': row['retweet_count'],
+                        'favorite_count': row['favorite_count'],
+                        '_search_string': row['_search_string'],
                     }
 
                     feature_point = Feature(geometry=point, properties=properties_point)
@@ -70,7 +77,15 @@ def add_fetched_tweets_loc():
                     properties_point = {
                         'title': row['place_name'],
                         'diameter': loc_range,
-                        'opacity': opacity
+                        'opacity': opacity,
+                        'sentiment_classifier_score': row['sentiment_classifier_score'],
+                        'label': row['label'],
+                        'created_at': row['created_at'],
+                        'coordinates_type': row['coordinates_type'],
+                        'place_name': row['place_name'],
+                        'retweet_count': row['retweet_count'],
+                        'favorite_count': row['favorite_count'],
+                        '_search_string': row['_search_string'],
                     }
 
                     feature_point = Feature(geometry=point, properties=properties_point)
@@ -97,6 +112,20 @@ def add_search_tweets_loc():
                 try:
                     coordinates_lon = float(row['LONGITUD'])
                     coordinates_lat = float(row['LATITUD'])
+                    coordinates_lat = float(row['LATITUD'])
+                    counter_POS = int(row['counter_POS'])
+                    counter_NEG = int(row['counter_NEG'])
+                    color = "#000000"
+
+                    if counter_POS > counter_NEG:
+                        color = '#FF0000'
+                    elif counter_POS < counter_NEG:
+                        color = '#00FF00'
+                    else:
+                        color = '#FFFF00'
+
+
+
                     loc_range = 0.04
                     opacity = 1
 
@@ -104,7 +133,10 @@ def add_search_tweets_loc():
                     properties_point = {
                         'title': row['EQUIPAMENT'],
                         'diameter': loc_range,
-                        'opacity': opacity
+                        'opacity': opacity,
+                        'counter_POS': counter_POS,
+                        'counter_NEG': counter_NEG,
+                        '_color': color
                     }
 
                     feature_point = Feature(geometry=point, properties=properties_point)
