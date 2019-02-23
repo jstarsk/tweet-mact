@@ -19,13 +19,26 @@ map_center = [41.3851, 2.1734]
 map_zoom = 11
 
 
+def dir_os_db(os_system="WIN"):
+    if os_system == "WIN":
+        db_folder = "%s\\db\\" % (os.getcwd())
+        db_csv = glob.glob("%s*.csv" % db_folder)
+    elif os_system == "OSX":
+        db_folder = "%s/db/" % (os.getcwd())
+        db_csv = glob.glob("%s*.csv" % db_folder)
+    else:
+        db_folder = "%s/db/" % (os.getcwd())
+        db_csv = glob.glob("%s*.csv" % db_folder)
+    return db_csv
+
+
 def add_fetched_tweets_loc():
-    db_folder = "%s\\db\\" % (os.getcwd())
-    db_csv = glob.glob("%s*.csv" % db_folder)
-    print(db_csv)
+
+    db_csv = dir_os_db(os_system='WIN')
+
     _tweets_locations = []
 
-    for db in  db_csv:
+    for db in db_csv:
         try:
             df = pd.read_csv(db)
 
