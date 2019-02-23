@@ -53,7 +53,9 @@
 
     mapboxgl.accessToken = '{{ACCESS_KEY}}';
 
-    let $_tweets_locations = {{tweets_locations|safe}};
+    let $_tweets_without_locations = {{_tweets_without_locations|safe}};
+    let $_search_locations = {{_search_locations|safe}};
+
 
     let map = new mapboxgl.Map({
         container: 'map',
@@ -63,14 +65,32 @@
     });
 
 
-    let tweets_locations = {
+    let _tweets_without_locations = {
         "type": "FeatureCollection",
-        "features": $_tweets_locations.map(function (tl) {
+        "features": $_tweets_without_locations.map(function (data_point) {
             return {
                 "type": "Feature",
                 "geometry": {
                     "type": "Polygon",
-                    "coordinates": _GeoJSONCircle(tl.geometry.coordinates, tl.properties.diameter, 32)
+                    "coordinates": _GeoJSONCircle(data_point.geometry.coordinates, data_point.properties.diameter, 32)
+                }
+            };
+
+        })
+    };
+
+    let _search_locations = {
+        "type": "FeatureCollection",
+        "features": $_search_locations.map(function (data_point) {
+            return {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Point",
+                    "coordinates": data_point.geometry.coordinates
+                },
+                properties: {
+                    title: data_point.properties.title,
+                    description: 'Transportation'
                 }
             };
 
@@ -78,23 +98,38 @@
     };
 
     map.on('load', function () {
-                map.addSource("tweets_locations", {
-                    "type": "geojson",
-                    "data": tweets_locations
-                });
+            map.addSource("_tweets_without_locations", {
+                "type": "geojson",
+                "data": _tweets_without_locations
+            });
 
-                map.addLayer({
-                    "id": "tweets_locations",
-                    "type": "fill",
-                    "source": "tweets_locations",
-                    'layout': {},
-                    'paint': {
-                        'fill-color': '#088',
-                        'fill-opacity': 0.01
-                    },
-                    "filter": ["==", "$type", "Polygon"]
-                });
-            }
+            map.addLayer({
+                "id": "_tweets_with_locations",
+                "type": "fill",
+                "source": "_tweets_without_locations",
+                'layout': {},
+                'paint': {
+                    'fill-color': '#088',
+                    'fill-opacity': 0.01
+                },
+                "filter": ["==", "$type", "Polygon"]
+            });
+
+            map.addSource("_search_locations", {
+                "type": "geojson",
+                "data": _search_locations
+            });
+
+            map.addLayer({
+                "id": "_search_locations",
+                "type": "symbol",
+                "source": "_search_locations",
+                "layout": {
+                    "icon-image": "rail-metro-15",
+                    "icon-size": 1,
+                }
+            });
+        }
     );
 
 </script>
