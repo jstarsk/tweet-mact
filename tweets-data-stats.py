@@ -26,20 +26,49 @@ def sentiment_classifier_tweets():
     for db in db_csv:
         try:
             df = pd.read_csv(db)
+            array = []
 
             for index, row in df.iterrows():
                 try:
+                    score = 0.0
                     if row['lang'] == "es":
-                        print(row['text'] + ' ==> %.5f' % clf.predict(row['text']))
+                        score = round(clf.predict(row['text']), 3)
+                        array.append(score)
+                        if score < 0.5:
+                            row['label'] = 'NEG'
+                        elif score > 0.5:
+                            row['label'] = 'POS'
+                        else:
+                            row['label'] = 'NEU'
                     elif row['lang'] == "ca":
-                        print(row['text'] + ' ==> %.5f' % clf.predict(row['text']))
+                        score = round(clf.predict(row['text']), 3)
+                        array.append(score)
+                        if score < 0.5:
+                            row['label'] = 'NEG'
+                        elif score > 0.5:
+                            row['label'] = 'POS'
+                        else:
+                            row['label'] = 'NEU'
                     elif row['lang'] == "en":
-                        print(row['text'] + ' ==> %.5f' % clf.predict(row['text']))
+                        score = round(clf.predict(row['text']), 3)
+                        array.append(score)
+                        if score < 0.5:
+                            row['label'] = 'NEG'
+                        elif score > 0.5:
+                            row['label'] = 'POS'
+                        else:
+                            row['label'] = 'NEU'
+                    print(row['text'] + ' ==> %.5f ==> %s' % (score, row['label']))
 
                 except Exception as e:
                     pass
 
+            se = pd.Series(array)
+            df['sentiment_classifier_score'] = se.values
+            df.to_csv(db, index=False)
+
         except Exception as e:
+            print(db)
             print(e)
 
 
