@@ -112,7 +112,7 @@ def add_search_tweets_loc():
                 try:
                     coordinates_lon = float(row['LONGITUD'])
                     coordinates_lat = float(row['LATITUD'])
-                    coordinates_lat = float(row['LATITUD'])
+                    _place = row['EQUIPAMENT']
                     counter_POS = int(row['counter_POS'])
                     counter_NEG = int(row['counter_NEG'])
                     nor_counter_NEG = float(row['nor_counter_NEG'])
@@ -130,7 +130,7 @@ def add_search_tweets_loc():
 
                     point = Point((coordinates_lon, coordinates_lat))
                     properties_point = {
-                        'title': row['EQUIPAMENT'],
+                        'title': _place,
                         'diameter': loc_range,
                         'opacity': opacity,
                         'counter_POS': counter_POS,
