@@ -79,6 +79,84 @@
         })
     };
 
+    let _search_locations_NEG = {
+        "type": "FeatureCollection",
+        "features": $_search_locations.map(function (data_point) {
+
+            let _slice_counter = data_point.properties.nor_counter_NEG;
+            let _data;
+            let data;
+            if (_slice_counter > 0) {
+                _data = _GeoJSONCircle(data_point.geometry.coordinates, 0.3, 100);
+                _data = _data[0].slice(0, _slice_counter);
+                _data.push(data_point.geometry.coordinates);
+                data = [_data];
+            } else {
+                data = _GeoJSONCircle(data_point.geometry.coordinates, 0, 1)
+            }
+
+            return {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": data
+                }
+            };
+
+        })
+
+    };
+
+    let _search_locations_POS = {
+        "type": "FeatureCollection",
+        "features": $_search_locations.map(function (data_point) {
+
+            let _slice_counter = data_point.properties.nor_counter_NEG;
+            let _data;
+            let data;
+            if (_slice_counter > 0) {
+                _data = _GeoJSONCircle(data_point.geometry.coordinates, 0.3, 100);
+                _data = _data[0].slice(_slice_counter - 1, _data[0].length);
+                _data.push(data_point.geometry.coordinates);
+                data = [_data];
+            } else {
+                data = _GeoJSONCircle(data_point.geometry.coordinates, 0, 1)
+            }
+
+            return {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": data
+                }
+            };
+
+        })
+    };
+
+
+    let _search_locations_NEU = {
+        "type": "FeatureCollection",
+        "features": $_search_locations.map(function (data_point) {
+
+            let _slice_counter = data_point.properties.nor_counter_NEG;
+            let data;
+            if (_slice_counter > 0) {
+                data = _GeoJSONCircle(data_point.geometry.coordinates, 0, 1)
+            } else {
+                data = _GeoJSONCircle(data_point.geometry.coordinates, 0.05, 32)
+            }
+            return {
+                "type": "Feature",
+                "geometry": {
+                    "type": "Polygon",
+                    "coordinates": data
+                }
+            };
+
+        })
+    };
+
     let _search_locations = {
         "type": "FeatureCollection",
         "features": $_search_locations.map(function (data_point) {
@@ -99,19 +177,69 @@
     };
 
     map.on('load', function () {
-            map.addSource("_tweets_without_locations", {
+            {#            map.addSource("_tweets_without_locations", {
+                            "type": "geojson",
+                            "data": _tweets_without_locations
+                        });#}
+
+            {#            map.addLayer({
+                            "id": "_tweets_with_locations",
+                            "type": "fill",
+                            "source": "_tweets_without_locations",
+                            'layout': {},
+                            'paint': {
+                                'fill-color': '#088',
+                                'fill-opacity': 1
+                            },
+                            "filter": ["==", "$type", "Polygon"]
+                        });#}
+            map.addSource("_search_locations_POS", {
                 "type": "geojson",
-                "data": _tweets_without_locations
+                "data": _search_locations_POS
             });
 
             map.addLayer({
-                "id": "_tweets_with_locations",
+                "id": "_search_locations_POS",
                 "type": "fill",
-                "source": "_tweets_without_locations",
+                "source": "_search_locations_POS",
                 'layout': {},
                 'paint': {
-                    'fill-color': '#088',
-                    'fill-opacity': 0.01
+                    'fill-color': '#00FF00',
+                    'fill-opacity': 0.7
+                },
+                "filter": ["==", "$type", "Polygon"]
+            });
+
+            map.addSource("_search_locations_NEG", {
+                "type": "geojson",
+                "data": _search_locations_NEG
+            });
+
+            map.addLayer({
+                "id": "_search_locations_NEG",
+                "type": "fill",
+                "source": "_search_locations_NEG",
+                'layout': {},
+                'paint': {
+                    'fill-color': '#FF0000',
+                    'fill-opacity': 0.7
+                },
+                "filter": ["==", "$type", "Polygon"]
+            });
+
+            map.addSource("_search_locations_NEU", {
+                "type": "geojson",
+                "data": _search_locations_NEU
+            });
+
+            map.addLayer({
+                "id": "_search_locations_NEU",
+                "type": "fill",
+                "source": "_search_locations_NEU",
+                'layout': {},
+                'paint': {
+                    'fill-color': '#ffc800',
+                    'fill-opacity': 1
                 },
                 "filter": ["==", "$type", "Polygon"]
             });

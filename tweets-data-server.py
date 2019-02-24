@@ -105,7 +105,7 @@ def add_search_tweets_loc():
     _search_tweets_loc = []
 
     for db in db_csv:
-        try:
+        try:WIN
             df = pd.read_csv(db)
 
             for index, row in df.iterrows():
@@ -115,6 +115,10 @@ def add_search_tweets_loc():
                     coordinates_lat = float(row['LATITUD'])
                     counter_POS = int(row['counter_POS'])
                     counter_NEG = int(row['counter_NEG'])
+                    nor_counter_NEG = float(row['nor_counter_NEG'])
+                    nor_counter_POS = float(row['nor_counter_POS'])
+                    loc_range = 0.04
+                    opacity = 1
                     color = "#000000"
 
                     if counter_POS > counter_NEG:
@@ -124,11 +128,6 @@ def add_search_tweets_loc():
                     else:
                         color = '#FFFF00'
 
-
-
-                    loc_range = 0.04
-                    opacity = 1
-
                     point = Point((coordinates_lon, coordinates_lat))
                     properties_point = {
                         'title': row['EQUIPAMENT'],
@@ -136,6 +135,8 @@ def add_search_tweets_loc():
                         'opacity': opacity,
                         'counter_POS': counter_POS,
                         'counter_NEG': counter_NEG,
+                        'nor_counter_NEG': nor_counter_NEG,
+                        'nor_counter_POS': nor_counter_POS,
                         '_color': color
                     }
 
