@@ -208,8 +208,7 @@ if __name__ == "__main__":
 
     interest_point = pd.read_csv("%s/db_input/Transports.csv" % (os.getcwd()))
 
-    # search_topics = ["#metrobcn", "#busbcn", "#VagaMetro", "VagaMetro", "metrobcn", "busbcn", "@TMBinfo"]
-    search_topics = ["barcelona", "@AdadColau"]
+    search_topics = ["#metrobcn", "#busbcn", "#VagaMetro", "VagaMetro", "metrobcn", "busbcn", "@TMBinfo", "barcelona", "@AdadColau"]
 
 
     print("--------------------------------------------------------------------------")
