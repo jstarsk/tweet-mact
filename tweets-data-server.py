@@ -105,7 +105,7 @@ def add_search_tweets_loc():
     _search_tweets_loc = []
 
     for db in db_csv:
-        try:WIN
+        try:
             df = pd.read_csv(db)
 
             for index, row in df.iterrows():

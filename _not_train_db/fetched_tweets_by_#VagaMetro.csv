@@ -1,3 +1,0 @@
-id,created_at,user_id,text,lang,coordinates_type,coordinates_lat,coordinates_lon,place_id,place_name,place_country_code,retweet_count,favorite_count,_search_string,_search_loc_lat,_search_loc_lon,_search_loc_range,label
-1098118760723083264,Wed Feb 20 07:14:49 +0000 2019,416218697,"@TMBinfo #L3 #metrobcn Aturat, ens informeu?",ca,None,None,None,1a27537478dd8e38,None,ES,0,0,#metrobcn,41.397791,2.135427,1,None
-1096069051871162369,Thu Feb 14 15:30:00 +0000 2019,2288956136,"🚇 TMB Class 5000 train at Can Boixeres station, Barcelona metro line 5 #metrodebarcelona #metrobcn #canboixeres #l5… https://t.co/uIwCrEjnGE",en,Point,41.36634167,2.09068611,1aca5ffbc553e95b,None,ES,0,0,#metrobcn,41.362753000000005,2.0839939999999997,1,None
